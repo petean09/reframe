@@ -316,7 +316,16 @@ class Relation(pd.DataFrame):
         4               Algeria
         >>>
         """
+        
         return Relation(super().rename(columns={old:new}).drop_duplicates())
+    
+    def semi_join(self,other):
+        '''Only returns rows from the left table even if their are multiple matching rows from the right table.
+        A left semi join is the same as filtering the left table for only rows with keys present in the right table.'''
+
+        similar_cols = set(self.columns).intersection(set(other.columns))
+        return Relation(self.filter(similar_cols))
+        
 
     def cartesian_product(self,other):
         self['__cartkey__'] = 1
