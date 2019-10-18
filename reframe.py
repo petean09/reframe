@@ -321,7 +321,16 @@ class Relation(pd.DataFrame):
     
     def semi_join(self,other):
         '''Only returns rows from the left table even if their are multiple matching rows from the right table.
-        A left semi join is the same as filtering the left table for only rows with keys present in the right table.'''
+
+            :param other
+            :return: Relation
+
+            Example:
+
+            >>> from reframe import Relation
+            >>> country = Relation('country.csv')
+            >>> country.query('continent == "Africa"').project(['name', 'region']).semi_join(country.query('region == "Western Africa"').project(['name', 'region']))
+        '''
 
         similar_cols = set(self.columns).intersection(set(other.columns))
         return Relation(self.filter(similar_cols))
